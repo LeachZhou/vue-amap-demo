@@ -1,4 +1,3 @@
-var purl = 'http://jielv.181.021mc.net';
 
 /**
  * 判断是否登录

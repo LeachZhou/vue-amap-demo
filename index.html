@@ -161,59 +161,6 @@
         methods: {
             selectLabel: function (index) {
                 vContent.labelList = index;
-            },
-            openPop: function (oid) {
-                var obj = '#pop';
-                this.$options.methods.center(obj);
-                vContent.oid = oid;
-            },
-            closePop: function () {
-                $("#popParent").hide();
-                $("body,html").css({"overflow": "visible"});
-                vContent.labelList = '';
-            },
-            center: function (obj) {
-                $(obj).parent().show();
-                $("body,html").css({"overflow": "hidden"});
-                var windowWidth = document.documentElement.clientWidth;
-                var windowHeight = document.documentElement.clientHeight;
-                var popupWidth = $(obj).width();
-                var popupHeight = $(obj).height() + 100;//$(obj).height()是#pop里面的高度，但是还是有个padding:50px;所以加上100,宽度加不加无所谓
-                var top;
-                var left = (windowWidth - popupWidth) / 2;
-                if (popupHeight > windowHeight) {
-                    top = '100px';
-                } else {
-                    top = (windowHeight - popupHeight) / 2;
-                }
-                $(obj).css({
-                    "position": "absolute",
-                    "top": top,
-                    "left": left,
-                    "margin-left": 0
-                });
-            },
-            ratingFun: function () {
-                $.ajax({
-                    type: 'POST',
-                    url: purl + '/index.php/index/order/assess_driver',
-                    dataType: "json",
-                    data: {
-                        "oid": vContent.oid,
-                        "assess": $('.rating-label-active').attr('data-assess')
-                    },
-                    success: function (res) {
-                        if (res.code == 1000) {
-                            alert("评价成功");
-                            location.reload();
-                        } else {
-                            alert(res.code + res.msg);
-                        }
-                    },
-                    error: function () {
-
-                    }
-                });
             }
         },
         updated: function () {
