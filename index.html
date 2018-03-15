@@ -11,6 +11,7 @@
     <meta name="keywords" content="">
     <meta name="description" content="">
     <script src="js/jquery-1.11.0.min.js" type="text/javascript"></script>
+    <link rel="stylesheet" href="css/style.css">
     <script type="text/javascript"
             src="http://webapi.amap.com/maps?v=1.4.4&key=925bb7f0af2fdd22d68cabd4e4f84129"></script>
     <script src="//webapi.amap.com/ui/1.0/main.js?v=1.0.11"></script>
@@ -20,9 +21,16 @@
     </style>
 </head>
 <body>
-<div id="vContent" v-cloak>
-    <input type="text" id="autoMapTitleInput">
-    <div id="container" tabindex="0" style="width:840px; height: 480px;"></div>
+<div id="vContent" v-cloak style="width: 840px;margin: 20px auto;">
+    <div style="position:relative;">
+        <input id="autoMapTitleInput" class="online-address-title-input" type="text"
+               placeholder="请输入地址信息"/>
+        <input id="autoMapDetailsInput" class="online-address-details-input" type="text"/>
+        <button id="autoMapBtn" class="online-address-btn" disabled>确定是这</button>
+        <div id="autoMapList" class="online-address-list"></div>
+        <div id="container" tabindex="0" style="width:840px; height: 480px;"></div>
+
+    </div>
 </div>
 
 <script src="js/p.js" type="text/javascript"></script>
@@ -33,7 +41,6 @@
     var vContent = new Vue({
         el: '#vContent',
         data: {
-            purl: purl,
             list: [],
             assess_list: [],
             oid: '',
@@ -157,12 +164,39 @@
                 });
             }
 
-        },
-        methods: {
-            selectLabel: function (index) {
-                vContent.labelList = index;
+            /**
+             * 点击自动提示列表
+             */
+            clickAutoList('autoMap');
+
+            function clickAutoList(pre) {
+                $("#" + pre + "List").on("click", "li", function () {
+                    //改变地图中心
+                    datamap.setZoomAndCenter(18, $(this).attr('data-geo').split(','));
+                    //清除所有点标注
+                    datamap.remove(marker);
+                    // 在新中心点添加 marker
+                    marker = new AMap.Marker({
+                        map: datamap,
+                        position: $(this).attr('data-geo').split(',')
+                    });
+                    $("#" + pre + "TitleInput").prop('data-geo', $(this).attr('data-geo'));
+                    $("#" + pre + "TitleInput").val($(this).attr('data-title'));
+                    $("#" + pre + "DetailsInput").val($(this).attr('data-address'));
+                    $("#" + pre + "List").hide();
+                });
             }
+
+            /**
+             * 点击弹窗内确认
+             */
+            $("#autoMapBtn").on("click", function () {
+                if ($("#autoMapTitleInput").prop('data-geo')) {
+                    alert($("#autoMapTitleInput").prop('data-geo')+"------"+$("#autoMapTitleInput").val()+"------"+$("#autoMapDetailsInput").val());
+                }
+            });
         },
+        methods: {},
         updated: function () {
 
 
