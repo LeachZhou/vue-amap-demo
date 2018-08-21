@@ -182,6 +182,8 @@
                     $("#" + pre + "TitleInput").val($(this).attr('data-title'));
                     $("#" + pre + "DetailsInput").val($(this).attr('data-address'));
                     $("#" + pre + "List").hide();
+                    $("#autoMapBtn").removeAttr('disabled');
+                    $("#autoMapBtn").css({"background": "#0a0724", "border": "1px solid #0a0724"});
                 });
             }
 
